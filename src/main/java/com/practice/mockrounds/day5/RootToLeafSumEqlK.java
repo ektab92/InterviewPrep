@@ -1,7 +1,6 @@
 package com.practice.mockrounds.day5;
 import java.util.*;
 import com.practice.ds.TreeNode;
-import com.practice.samples.TreeSamples;
 
 public class RootToLeafSumEqlK {
     int sum=0;
