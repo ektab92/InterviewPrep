@@ -8,6 +8,13 @@ public class TreeSamples {
 
     static{
         // Construction of a BST
+        TREE = constructTree();
+
+        //TODO : Other Sample trees
+
+    }
+
+    public static TreeNode constructTree(){
         TreeNode TREE = new TreeNode(10);
         TreeNode sbTree = new TreeNode(5);
         sbTree.left = new TreeNode(3);
@@ -20,9 +27,7 @@ public class TreeSamples {
         TREE.right.left = new TreeNode(13);
         TREE.right.right = new TreeNode(30);
         TREE.left.left.right = sbTree;
-
-        //TODO : Other Sample trees
-
+        return TREE;
     }
 
 

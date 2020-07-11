@@ -4,7 +4,7 @@ import java.util.Arrays;
 
 public class UnionFindCycleDetection {
     int vertexSet[];
-    UnionFindCycleDetection(int vertices)
+    public UnionFindCycleDetection(int vertices)
     {
         this.vertexSet = new int[vertices+1];
         Arrays.fill(vertexSet,-1);
@@ -27,7 +27,7 @@ public class UnionFindCycleDetection {
         }
         return 0;
     }
-    private int find(int v1)
+    public int find(int v1)
     {
         while(vertexSet[v1] >0)
         {
