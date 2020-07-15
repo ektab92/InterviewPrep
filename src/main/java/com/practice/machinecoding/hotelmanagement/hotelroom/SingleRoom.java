@@ -7,7 +7,7 @@ public class SingleRoom extends HotelRoom{
     }
 
     @Override
-    public int getPrice() {
-        return 0;
+    public int getPrice(int noOfDays) {
+        return basePrice*noOfDays;
     }
 }

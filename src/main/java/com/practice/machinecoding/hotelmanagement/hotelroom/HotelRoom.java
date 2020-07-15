@@ -30,6 +30,6 @@ abstract public class HotelRoom implements Comparable<HotelRoom>{
             return -1;
 
     }
-    public abstract int getPrice();
+    public abstract int getPrice(int noOfDays);
 
 }

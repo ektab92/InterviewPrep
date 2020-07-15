@@ -10,6 +10,7 @@ import java.util.*;
 import java.util.PriorityQueue;
 
 public class HotelManager {
+    private static Object LOCK = new Object();
     int maxFloors;
     //floor 1 room1 on top..then so on
     PriorityQueue<HotelRoom> minHeap = new PriorityQueue<>();
@@ -26,54 +27,64 @@ public class HotelManager {
         roomIdRoomMap.put(roomId,hotelRoomObj);
         minHeap.add(hotelRoomObj);
         maxHeap.add(hotelRoomObj);
+        System.out.println(String.format("Room %d added on floor %d",roomId,floor));
     }
 
-    public void checkIn(int guestId,int noOfRooms, Date checkinDate, Date checkOutDate,AllocationPreference pref)
-    {
-        int k =0;
-        List<Integer>roomIds = new ArrayList<>();
-        if(pref == AllocationPreference.TOP)
-        {
-            while(k<noOfRooms)
-            {
-                HotelRoom roomObj = maxHeap.remove();
-                roomIdGuestIdMap.put(roomObj.roomId,guestId);
-                roomIds.add(roomObj.roomId);
-                minHeap.remove(roomObj);
-                k++;
+    public synchronized void  checkIn(int guestId,int noOfRooms, Date checkinDate, int noDays,AllocationPreference pref) throws Exception {
+        int k = 0;
+        List<Integer> roomIds = new ArrayList<>();
+        //synchronized (LOCK) {
+            if (maxHeap.size() >= noOfRooms) {
+                if (pref == AllocationPreference.TOP) {
+                    while (k < noOfRooms) {
+                        HotelRoom roomObj = maxHeap.remove();
+                        roomIdGuestIdMap.put(roomObj.roomId, guestId);
+                        roomIds.add(roomObj.roomId);
+                        minHeap.remove(roomObj);
+                        k++;
+                    }
+                } else {
+                    while (k < noOfRooms) {
+                        HotelRoom roomObj = minHeap.remove();
+                        roomIdGuestIdMap.put(roomObj.roomId, guestId);
+                        roomIds.add(roomObj.roomId);
+                        maxHeap.remove(roomObj);
+                        k++;
+                    }
+                }
+
+                GuestRepo.GuestDetails guestDetails = new GuestRepo.GuestDetails(noOfRooms, checkinDate, noDays);
+                guestDetails.roomIdList = roomIds;
+                GuestRepo.guestDetailsMap.put(guestId, guestDetails);
+                System.out.println(String.format("Rooms allocated to guest %d, are %s", guestId, roomIds.toString()));
+
+            } else{
+                throw new Exception(String.format("We dont have %d available rooms!!! Better luck next time!!", noOfRooms));
             }
-        }
-        else
-        {
-            while(k<noOfRooms)
-            {
-                HotelRoom roomObj = minHeap.remove();
-                roomIdGuestIdMap.put(roomObj.roomId,guestId);
-                roomIds.add(roomObj.roomId);
-                maxHeap.remove(roomObj);
-                k++;
-            }
-        }
-        GuestRepo.GuestDetails guestDetails = new GuestRepo.GuestDetails(noOfRooms,checkinDate,checkOutDate);
-        guestDetails.roomIdList = roomIds;
-        GuestRepo.guestDetailsMap.put(guestId,guestDetails);
-        System.out.println(String.format("Rooms allocated to guest %d, are %s",guestId,roomIds.toString()));
+        //}
     }
-    public void checkOut(int guestId)
+    public synchronized void checkOut(int guestId)
     {
         GuestRepo.GuestDetails guestObj =GuestRepo.guestDetailsMap.get(guestId);
+        int totalPrice=0;
         for(int roomId:guestObj.roomIdList)
         {
-            maxHeap.add(roomIdRoomMap.get(roomId));
-            minHeap.add(roomIdRoomMap.get(roomId));
+            HotelRoom room = roomIdRoomMap.get(roomId);
+            totalPrice+=room.getPrice(guestObj.noOfDays);
+            maxHeap.add(room);
+            minHeap.add(room);
+
             roomIdGuestIdMap.remove(roomId);
         }
+
         System.out.println(String.format("checked out guest %d, from rooms %s",guestId,guestObj.roomIdList.toString()));
+        System.out.println(String.format("Your bill is %d . Visit Again!!!",totalPrice));
         guestObj.roomIdList.clear();
 
     }
 
-    public static void main(String[] args) {
+
+    public static void main(String[] args) throws Exception {
         HotelManager hotelManager = new HotelManager();
         hotelManager.addRooms(1,RoomType.SINGLE,1);
         hotelManager.addRooms(2,RoomType.DOUBLE,1);
@@ -90,10 +101,22 @@ public class HotelManager {
         hotelManager.addRooms(11,RoomType.FAMILY,4);
 
         Long nowDate = System.currentTimeMillis();
-        hotelManager.checkIn(20,1,new Date(nowDate),new Date (nowDate+2*24*60*60*1000), AllocationPreference.DEFAULT);
+        hotelManager.checkIn(20,1,new Date(nowDate),2, AllocationPreference.DEFAULT);
 
-        hotelManager.checkIn(21,2,new Date(nowDate),new Date (nowDate+2*24*60*60*1000), AllocationPreference.TOP);
+        hotelManager.checkIn(21,2,new Date(nowDate),1, AllocationPreference.TOP);
         hotelManager.checkOut(20);
+
+        /*hotelManager.checkIn(22,3,new Date(nowDate),2, AllocationPreference.BOTTOM);
+        hotelManager.checkIn(23,1,new Date(nowDate),1, AllocationPreference.TOP);
+        hotelManager.checkIn(24,2,new Date(nowDate),2, AllocationPreference.BOTTOM);
+
+        hotelManager.checkIn(25,2,new Date(nowDate),2, AllocationPreference.TOP);
+        hotelManager.checkIn(26,1,new Date(nowDate),1, AllocationPreference.TOP);
+        hotelManager.checkOut(25);
+
+        hotelManager.checkIn(27,2,new Date(nowDate),1, AllocationPreference.TOP);
+        */
+
 
     }
 }

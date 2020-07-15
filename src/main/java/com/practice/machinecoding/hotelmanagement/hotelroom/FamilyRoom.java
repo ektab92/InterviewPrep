@@ -6,7 +6,7 @@ public class FamilyRoom extends HotelRoom {
     }
     int basePrice=3000;
     @Override
-    public int getPrice() {
-        return 0;
+    public int getPrice(int noOfDays) {
+        return this.basePrice*noOfDays;
     }
 }
