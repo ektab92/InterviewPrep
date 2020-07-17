@@ -4,6 +4,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class SnakeLadderBoard {
+    private int start=0;
+    private int end=100;
+    private Map<Integer,Integer> ladderMap;
+    private Map<Integer,Integer> snakeMap;
+
     public int getStart() {
         return start;
     }
@@ -15,13 +20,6 @@ public class SnakeLadderBoard {
     public int getEnd() {
         return end;
     }
-
-    public void setEnd(int end) {
-        this.end = end;
-    }
-
-    private int start=0;
-    private int end=100;
 
     public Map<Integer, Integer> getLadderMap() {
         return ladderMap;
@@ -39,8 +37,6 @@ public class SnakeLadderBoard {
         this.snakeMap = snakeMap;
     }
 
-    private Map<Integer,Integer> ladderMap;
-    private Map<Integer,Integer> snakeMap;
     public SnakeLadderBoard()
     {
         this(0,100);    //to avoid code duplication
