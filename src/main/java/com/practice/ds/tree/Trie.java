@@ -72,6 +72,33 @@ class Trie {
         }
         return true;
     }
+
+    public boolean deleteWordRev(TrieNode curr,String word,int index)
+    {
+        if(index == word.length())
+        {
+            if(!curr.isEOW)
+            {
+                return false;
+            }
+            curr.isEOW=false;
+            return (curr.children.size() == 0);
+        }
+        if(!curr.children.containsKey(word.charAt(index)))
+        {
+            return false;
+        }
+        else
+        {
+           boolean canDelete= deleteWordRev(curr.children.get(word.charAt(index)),word,index+1);
+           if(canDelete)
+           {
+               curr.children.remove(word.charAt(index));
+               return (curr.children.size() == 0);
+           }
+        }
+        return false;
+    }
     public boolean deleteWord(TrieNode curr,String word,int index)
     {
         // if index is equal to length of word
@@ -99,6 +126,20 @@ class Trie {
             return curr.children.size()==0; // check if mapping has some value . If 0 then consider this current node for deletion in successive recursion stack.
         }
         return false;
+    }
+
+    public static void main(String[] args) {
+        Trie trie = new Trie();
+        trie.insert("abc");
+        trie.insert("abcd");
+        trie.insert("ag");
+        trie.insert("bmaq");
+        trie.deleteWordRev(trie.root,"abc",0);
+        boolean found=trie.search("abc");
+        if(found)
+            System.out.println("true");
+        else
+            System.out.println("false");
     }
 }
 
