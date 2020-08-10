@@ -1,6 +1,6 @@
 package com.practice.ds.amazon.misc;
 
-public class Replace0To1InInt {
+public class Replace0To5InInt {
     private int replace0To5(int num)
     {
         int shadow = num;
@@ -19,7 +19,7 @@ public class Replace0To1InInt {
         return num;
     }
     public static void main(String[] args) {
-        Replace0To1InInt ops =new Replace0To1InInt();
+        Replace0To5InInt ops =new Replace0To5InInt();
         ops.replace0To5(1020);
         ops.replace0To5(102000);
         ops.replace0To5(123);
