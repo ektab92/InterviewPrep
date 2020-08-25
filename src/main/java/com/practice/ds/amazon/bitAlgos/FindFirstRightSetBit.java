@@ -1,7 +1,7 @@
 package com.practice.ds.amazon.bitAlgos;
 
 public class FindFirstRightSetBit {
-    private int findFirstSetBitFromRight(int num)
+    public int findFirstSetBitFromRight(int num)
     {
         boolean ans=false;
         int count = 0;
@@ -16,11 +16,13 @@ public class FindFirstRightSetBit {
                 count++;
             }
         }
-        return count+1;
+        System.out.println(val);
+        return val;
+        //return count+1;
     }
     public static void main(String[] args) {
         FindFirstRightSetBit bitOps = new FindFirstRightSetBit();
-        int firstSetBit=bitOps.findFirstSetBitFromRight(18);
+        int firstSetBit=bitOps.findFirstSetBitFromRight(9^7);
         System.out.println("first set bit from right is : "+firstSetBit);
     }
 }

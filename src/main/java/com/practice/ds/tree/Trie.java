@@ -75,58 +75,26 @@ class Trie {
 
     public boolean deleteWordRev(TrieNode curr,String word,int index)
     {
-        if(index == word.length())
-        {
-            if(!curr.isEOW)
-            {
+        if(index == word.length()) {
+            if (!curr.isEOW)
                 return false;
-            }
-            curr.isEOW=false;
+            curr.isEOW = false;
             return (curr.children.size() == 0);
         }
         if(!curr.children.containsKey(word.charAt(index)))
-        {
             return false;
-        }
-        else
+        TrieNode temp = curr.children.get(word.charAt(index));
+        if(temp == null)
+            return false;
+        boolean canDelete = deleteWordRev(temp,word,index+1);
+        if(canDelete)
         {
-           boolean canDelete= deleteWordRev(curr.children.get(word.charAt(index)),word,index+1);
-           if(canDelete)
-           {
-               curr.children.remove(word.charAt(index));
-               return (curr.children.size() == 0);
-           }
+            curr.children.remove(word.charAt(index));
+            return (curr.children.size() == 0);
         }
         return false;
     }
-    public boolean deleteWord(TrieNode curr,String word,int index)
-    {
-        // if index is equal to length of word
-        if(index == word.length()){
 
-            if(curr.isEOW == false){
-                // this substring exist but word does not exist in our Trie
-                // return false as nothing to delete
-                return false;
-            }
-            // isEOW is true
-            curr.isEOW = false; // the word got deleted
-            return curr.children.size()==0; // if size is zero then this is not prefix to any other word and should be deleted
-        }
-
-        // find the node based on the current char
-        TrieNode n = curr.children.get(word.charAt(index));
-        if(n == null){
-            return false;
-        }
-        boolean shouldDelete = deleteWord(n,word,index+1);
-
-        if(shouldDelete){
-            curr.children.remove(word.charAt(index)); // delete entry of node mapping from curr node
-            return curr.children.size()==0; // check if mapping has some value . If 0 then consider this current node for deletion in successive recursion stack.
-        }
-        return false;
-    }
 
     public static void main(String[] args) {
         Trie trie = new Trie();

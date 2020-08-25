@@ -1,6 +1,10 @@
 package com.practice.ds.arrays;
 
 import java.util.*;
+/*
+    1. Prepare Suffix Arr, that is SuffixArr[i], is greatest val on right of i
+    2. Sorted Set to keep sorted values before arr[i]
+ */
 
 public class MaximumTripletSum {
     private static void findTripletSum(int[] arr)
@@ -18,38 +22,38 @@ public class MaximumTripletSum {
         Integer []sortedArr;
         for(int i=1;i<N-1;i++)
         {
+           sortedSet.add(arr[i]);
            sortedArr = sortedSet.toArray(new Integer[0]);
            //sortedSet.
-           int justLessVal = binarySearch(sortedArr,0, sortedArr.length-1, arr[i]);
+           int justLessVal = binarySearch(sortedArr, arr[i]);
            //System.out.println(justLessVal);
            if(justLessVal!=-1)
            {
-               maximalSum=Math.max(maximalSum,arr[i]+justLessVal+suffixArr[i+1]);
+               maximalSum=Math.max(maximalSum,arr[i]+arr[justLessVal]+suffixArr[i+1]);
            }
         }
         System.out.println(maximalSum);
     }
-    private static int binarySearch(Integer[] arr, int lo, int hi, int target)
+    private static int binarySearch(Integer[] arr, int target)
     {
-        if(lo>hi) return -1;
-        int mid=lo+(hi-lo)/2;
-        if(lo==hi && target>arr[lo])
-        {
-            return arr[lo];
-        }
-        if(lo==hi && target<arr[lo])
-        {
-            return -1;
-        }
-        if(arr[mid]>target)
-        {
-           return binarySearch(arr,lo,mid-1,target);
-        }
-        else
-        {
-           return binarySearch(arr,mid,hi,target);
-        }
+        int start = 0, end = arr.length-1;
 
+        int ans = -1;
+        while (start <= end) {
+            int mid = (start + end) / 2;
+
+            // Move to the left side if the target is smaller
+            if (arr[mid] >= target) {
+                end = mid - 1;
+            }
+
+            // Move right side
+            else {
+                ans = mid;
+                start = mid + 1;
+            }
+        }
+        return ans;
     }
     public static void main(String[] args) {
         int [] arr={2,5,3,1,4,9};

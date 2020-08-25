@@ -22,40 +22,35 @@ public class DetectCycleRemoveCycle {
     }
     private int findLengthOfCycle()
     {
-        ListNode ptr2 = ptr1;
-        int k=1;
-        while(ptr2.next != ptr1)
+        ListNode ptr2 = ptr1.next;
+        int len =1;
+        while(ptr1 != ptr2)
         {
-            ptr2=ptr2.next;
-            k++;
+            ptr2= ptr2.next;
+            len++;
         }
-        System.out.println(k);
-        return k;
+        return len;
     }
     private void removeCycle(ListNode head,int k)
     {
-        ListNode ptr2=head;
-
-        if(head == null) return ;
-        //increment one pointer till length of loop
+        ListNode ptr1 = head;
         while(k>0)
         {
-            ptr2=ptr2.next;
+            ptr1=ptr1.next;
             k--;
         }
-        //find where both pointers meet, so that they reach beginning of loop
-        ptr1=head;
-        while(ptr1!=ptr2)
+        ListNode ptr2 = head;
+        while(ptr1!= ptr2)
         {
             ptr1=ptr1.next;
             ptr2=ptr2.next;
         }
-        // ptr2 is at begining of the loop
-        while(ptr1.next != ptr2)
+        ptr2 = ptr1.next;
+        while(ptr2.next != ptr1)
         {
-            ptr1=ptr1.next;
+            ptr2 = ptr2.next;
         }
-        ptr1.next=null;
+        ptr2.next = null;
     }
     private void driver(ListNode head)
     {
@@ -63,6 +58,7 @@ public class DetectCycleRemoveCycle {
         if(detectCycle(head))
         {
             int k=findLengthOfCycle();
+            System.out.println("length "+k);
             removeCycle(head,k);
         }
 
@@ -78,7 +74,8 @@ public class DetectCycleRemoveCycle {
         head.next.next.next.next.next.next = new ListNode(8);
         head.next.next.next.next.next.next.next = new ListNode(9);
         head.next.next.next.next.next.next.next.next = new ListNode(10);
-        head.next.next.next.next.next.next.next.next.next = head.next.next.next.next;
+        head.next.next.next.next.next.next.next.next.next = new ListNode(11);
+        head.next.next.next.next.next.next.next.next.next.next = head.next.next.next.next;
         cycleDetection.driver(head);
         while(head!=null)
         {

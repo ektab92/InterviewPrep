@@ -1,4 +1,4 @@
-package com.practice.ds;
+package com.practice.ds.greedy;
 
 import java.beans.FeatureDescriptor;
 import java.util.Arrays;
