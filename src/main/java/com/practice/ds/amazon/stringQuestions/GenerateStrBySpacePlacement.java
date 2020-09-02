@@ -15,15 +15,17 @@ public class GenerateStrBySpacePlacement {
     }
     private void helper(String s1 , char[] s2,int i,int j )
     {
-        if(i == s1.length())
-        {
-            s2[j]='\0';
-            result.add(new String(s2));
-            return;
-        }
-        s2[j]=' ';
-        s2[j+1]=s1.charAt(i);
-        helper(s1,s2,i+1,j+2);
+       if(i == s1.length())
+       {
+           s2[j]='\0';
+           result.add(new String(s2));
+           return;
+       }
+       //inserting space
+       s2[j]=' ';
+       s2[j+1]=s1.charAt(i);
+       helper(s1,s2,i+1,j+2);
+       //not inserting space
         s2[j]=s1.charAt(i);
         helper(s1,s2,i+1,j+1);
     }

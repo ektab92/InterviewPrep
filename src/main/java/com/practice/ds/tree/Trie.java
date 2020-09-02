@@ -81,8 +81,6 @@ class Trie {
             curr.isEOW = false;
             return (curr.children.size() == 0);
         }
-        if(!curr.children.containsKey(word.charAt(index)))
-            return false;
         TrieNode temp = curr.children.get(word.charAt(index));
         if(temp == null)
             return false;
